@@ -31,17 +31,17 @@ fi
 echo ""
 echo "Run 1/3: Baseline scenario"
 echo "----------------------------------------"
-python resnet_cifar10.py --scenario baseline --epochs 3
+python3 resnet_cifar10.py --scenario baseline --epochs 3
 
 echo ""
 echo "Run 2/3: I/O Bound scenario"
 echo "----------------------------------------"
-python resnet_cifar10.py --scenario io_bound --epochs 3
+python3 resnet_cifar10.py --scenario io_bound --epochs 3
 
 echo ""
 echo "Run 3/3: Optimized scenario"
 echo "----------------------------------------"
-python resnet_cifar10.py --scenario optimized --epochs 3
+python3 resnet_cifar10.py --scenario optimized --epochs 3
 
 echo ""
 echo "========================================"
