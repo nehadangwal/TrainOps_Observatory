@@ -288,6 +288,18 @@ Examples:
     delete_parser.add_argument('run_id', help='Run ID')
     delete_parser.add_argument('--yes', action='store_true', help='Skip confirmation')
     
+    # runs analysis
+    analysis_parser = runs_subparsers.add_parser('analysis', help='Show bottleneck analysis')
+    analysis_parser.add_argument('run_id', help='Run ID')
+    
+    # runs cost
+    cost_parser = runs_subparsers.add_parser('cost', help='Show cost analysis')
+    cost_parser.add_argument('run_id', help='Run ID')
+    
+    # runs recommendations
+    recommend_parser = runs_subparsers.add_parser('recommend', help='Show optimization recommendations')
+    recommend_parser.add_argument('run_id', help='Run ID')
+    
     # projects command
     subparsers.add_parser('projects', help='List all projects')
     

@@ -5,6 +5,8 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc, func
 from app.models import db, Run, Metric
+from app.analyzer import BottleneckAnalyzer
+from app.cost_estimator import CostEstimator
 
 api_bp = Blueprint('api', __name__)
 
@@ -227,4 +229,74 @@ def get_stats():
         'running_runs': running_runs,
         'completed_runs': total_runs - running_runs,
         'total_metrics': total_metrics,
+    })
+
+    # In routes.py, add the following two functions:
+
+@api_bp.route('/runs/<uuid:run_id>/analysis', methods=['GET'])
+def get_run_analysis(run_id):
+    """Get the bottleneck analysis report for a run."""
+    run = Run.query.get(run_id)
+    if not run:
+        return jsonify({'error': 'Run not found'}), 404
+    
+    # Analyzer requires metrics data, which is summarized/queried internally
+    analyzer = BottleneckAnalyzer(run_id=str(run.id))
+    try:
+        report = analyzer.generate_analysis_report()
+        return jsonify(report)
+    except Exception as e:
+        # Handle case where run might have no metrics yet
+        return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
+
+
+@api_bp.route('/runs/<uuid:run_id>/cost', methods=['GET'])
+def get_run_cost_report(run_id):
+    """Get the cost estimation and optimization report for a run."""
+    run = Run.query.get(run_id)
+    if not run:
+        return jsonify({'error': 'Run not found'}), 404
+        
+    estimator = CostEstimator(run_id=str(run.id))
+    try:
+        report = estimator.generate_cost_report()
+        return jsonify(report)
+    except Exception as e:
+        # Handle case where run might not be finished or instance type is missing
+        return jsonify({'error': f'Cost estimation failed: {str(e)}'}), 500
+
+
+@api_bp.route('/runs/compare', methods=['GET'])
+def compare_runs():
+    """Compare two runs side-by-side using summarized metrics."""
+    run_ids = request.args.getlist('run_id') # Expects: ?run_id=<id1>&run_id=<id2>
+    
+    if len(run_ids) != 2:
+        return jsonify({'error': 'Must provide exactly two run_id parameters for comparison'}), 400
+    
+    runs = Run.query.filter(Run.id.in_(run_ids)).all()
+    
+    if len(runs) != 2:
+        return jsonify({'error': 'One or both runs not found'}), 404
+        
+    # Fetch high-level analysis summary for visualization
+    comparison_data = []
+    for run in runs:
+        analyzer = BottleneckAnalyzer(run_id=str(run.id))
+        
+        # NOTE: We skip fetching the full cost report for simplicity here, 
+        # relying on the pre-computed run.total_cost field.
+        
+        comparison_data.append({
+            'run_id': str(run.id),
+            'name': run.name,
+            'project': run.project,
+            'total_cost': run.total_cost if run.total_cost is not None else 0.0,
+            'avg_gpu_util': run.avg_gpu_util if run.avg_gpu_util is not None else 0.0,
+            'avg_throughput': run.avg_throughput if run.avg_throughput is not None else 0.0,
+            'bottleneck_type': analyzer.get_primary_bottleneck_type(), # Assumes analyzer has this simple method
+        })
+        
+    return jsonify({
+        'runs': comparison_data
     })

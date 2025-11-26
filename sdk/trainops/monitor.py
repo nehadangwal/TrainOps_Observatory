@@ -279,12 +279,17 @@ class TrainOpsMonitor:
         """
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            self.start_collection()
+            if not self.run_id:
+                return func(*args, **kwargs) # Skip if setup failed
+            
+            self.start_collection() # Start collection only once (due to internal checks)
+            
             try:
                 result = func(*args, **kwargs)
                 return result
-            finally:
-                self.stop_collection()
+            except Exception:
+                # Log the error, but the explicit monitor.finish() will handle cleanup
+                raise
         
         return wrapper
     
