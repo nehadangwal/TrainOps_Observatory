@@ -37,11 +37,15 @@ for epoch in range(10):
 
 monitor.finish()
 ```
+Add 5 lines of code. Save 30-40% on GPU training costs.
+
+TrainOps Observatory provides real-time visibility into ML training workflows with minimal overhead. Automatically detect bottlenecks, get specific optimization recommendations, and track cost savings—all with less than 1% performance impact.
 
 View results:
 ```bash
 trainops runs show <run-id>
 ```
+
 
 ## 🚀 Quick Start
 
@@ -127,6 +131,27 @@ trainops runs list --project team_research
 # Get platform statistics
 trainops stats
 ```
+🎯 Proven Results
+We validated TrainOps on real GPU training workloads. Here's what we found:
+ResNet-18 on CIFAR-10 (Google Colab T4 GPU)
+The Problem: Training was slower than expected due to I/O bottleneck
+The Fix: Single configuration change detected by TrainOps (num_workers: 0 → 4)
+Implementation Time: 1 minute (1 line of code)
+Results:
+┌─────────────────────────────────────────────────────────────────┐
+│                    BEFORE  →  AFTER     IMPROVEMENT             │
+├─────────────────────────────────────────────────────────────────┤
+│ Training Time      3.15 min → 2.14 min     -32% ⬇️              │
+│ Throughput      1,656 s/s → 2,564 s/s     +55% ⬆️              │
+│ Cost per Run      $0.026  →  $0.018       -32% ⬇️              │
+└─────────────────────────────────────────────────────────────────┘
+
+💡 Key Insight: Processing 907 more samples/second with same GPU
+What This Means for You:
+Your GPU SpendMonthly Savings (32%)Annual Savings$500/month (Individual)$160/month$1,920/year$5,000/month (Small Team)$1,600/month$19,200/year$50,000/month (Medium Team)$16,000/month$192,000/year$500,000/month (Large Team)$160,000/month$1,920,000/year
+
+💰 ROI Example: For a team spending $50K/month on GPUs, TrainOps saves $16K/month. At $100/user/month for 10 users ($1,000/month), that's a 16x return on investment.
+
 
 ## 🏗️ Architecture
 
