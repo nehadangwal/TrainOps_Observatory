@@ -4,9 +4,9 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nehadangwal/TrainOps_Observatory/blob/main/blob/main/examples/colab_comparison.ipynb)
 
-
-
+https://colab.research.google.com/github/nehadangwal/TrainOps_Observatory/blob/main/blob/main/examples/colab_comparison.ipynb
 TrainOps Observatory provides real-time visibility into ML training workflows with minimal overhead. Add 5 lines of code to your training script and get instant insights into GPU utilization, bottlenecks, and cost optimization opportunities.
 
 ## ✨ Features
