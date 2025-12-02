@@ -5,7 +5,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nehadangwal/TrainOps_Observatory/blob/main/examples/colab_demo.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nehadangwal/TrainOps_Observatory/blob/main/examples/colab_comparison.ipynb)
+
 
 TrainOps Observatory provides real-time visibility into ML training workflows with minimal overhead. Add 5 lines of code to your training script and get instant insights into GPU utilization, bottlenecks, and cost optimization opportunities.
 
@@ -106,32 +106,24 @@ trainops runs list --project cifar10_classification
 
 ### Optimize Training Costs
 
-TrainOps tracks instance costs and identifies optimization opportunities:
+Optimize Training Costs (Validated Impact)
+TrainOps tracks instance costs and identifies optimization opportunities.
 
-```
-🚨 Bottleneck Detected: I/O Bound
+Real-World Example: Fixing an I/O Bottleneck
 
-Your GPU is only 45% utilized because data loading can't keep up.
+Running a benchmark on Google Colab (T4 GPU) identified an I/O bottleneck (num_workers=0). By implementing the recommended fix (num_workers=4), the following measurable impact was achieved:
+
+🚨 Bottleneck Detected: I/O Bound (32.7% GPU utilization)
 
 Recommendation: Add num_workers=4 to DataLoader
   
-Estimated Impact:
-  • Training time: 12.5hrs → 7.2hrs (-42%)
-  • Cost: $38.25 → $22.03 (-42%)
-  • Savings: $16.22 per run
+💰 Estimated Impact:
+  • Training Time: 3.14 min → 2.13 min (-32.1% Faster)
+  • Throughput: 1653 samples/s → 2588 samples/s (+56.6% Increase)
+  • Cost Savings: $0.026 per run → $0.018 per run (-32.1% Reduction)
 
-If you run 10 experiments/month: $162/month savings
-```
+🔑 Key Takeaway: Same compute resources, 32% faster results, enabling 1.5x more experiments in the same time.
 
-### Track Team-Wide Metrics
-
-```bash
-# View all team experiments
-trainops runs list --project team_research
-
-# Get platform statistics
-trainops stats
-```
 🎯 Proven Results
 We validated TrainOps on real GPU training workloads. Here's what we found:
 ResNet-18 on CIFAR-10 (Google Colab T4 GPU)
@@ -152,6 +144,16 @@ What This Means for You:
 Your GPU SpendMonthly Savings (32%)Annual Savings$500/month (Individual)$160/month$1,920/year$5,000/month (Small Team)$1,600/month$19,200/year$50,000/month (Medium Team)$16,000/month$192,000/year$500,000/month (Large Team)$160,000/month$1,920,000/year
 
 💰 ROI Example: For a team spending $50K/month on GPUs, TrainOps saves $16K/month. At $100/user/month for 10 users ($1,000/month), that's a 16x return on investment.
+
+
+Track Team-Wide Metrics
+Bash
+
+# View all team experiments
+trainops runs list --project team_research
+
+# Get platform statistics
+trainops stats
 
 
 ## 🏗️ Architecture
